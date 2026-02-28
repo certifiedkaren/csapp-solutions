@@ -34,8 +34,8 @@ return either 0 (false) or 1 (true)
 ### 2.1.9 - Shift Operations in C
 - **>>** - right shift
 - **<<** - left shift
-**logical right shift** - fills end with k 0's
-**arithmetic right shift** - fills end with k of the most significant bit
+- **logical right shift** - fills end with k 0's
+- **arithmetic right shift** - fills end with k of the most significant bit
 
 ## 2.2 - Integer Representations
 
@@ -46,5 +46,40 @@ return either 0 (false) or 1 (true)
 ### 2.2.3 - Two's-Complement Encodings
 - used to represent negative and positive numbers, where the most significant bit has negative weight
 - can represent one more negative number than positive
+
+### 2.2.4 - Conversions between signed and unsigned
+- when converting from signed to unsigned or vice versa in c, the bits do not change, but they are interpered in a different way
+
+### 2.2.5 - Signed vs Unsigned in C
+- if an operation is performed on one signed and one unsigned number, C casts the signed argument to unsigned
+
+### 2.2.6 - Expanding the Bit Representation of a Number
+- **zero extension** - when converting an unsigned number to a larger data type, we can add more leading 0's
+- **sign extension** - converting a two's complement number to a larger data type, add copies of most significant bit
+
+### 2.2.7 - Truncating Numbers
+- when converting to smaller data type, we truncate the numbers
+- in a two's complement number, its the same expect the leading bit is converted into a sign bit
+
+## 2.3 Integer Arithmetic
+
+### 2.3.1 - Unsigined Addition
+- if x+y > 2^w - 1, then the sum overflows
+
+### 2.3.2 - Two's-Complement Addition
+- there can be overflow when the amount of bits isn't enough to represent the number
+- **positive overflow** -> 2^(w-1) <= x+y
+- **negative overflow** -> x+y < -2^(w+1)
+- you can detect overflow if positive + positive = negative or negative + negative = positive
+
+### 2.3.3 - Two's-Complement Negation
+
+### 2.3.4 - Unsigned Multiplication
+- (x * y ) mod 2^w
+
+### 2.3.5 - Two's-Complement Multiplication
+- it can use up 2w bits, so in C its trunctaed to w bits
+- bit level representation of unsigned and two's complement multiplication are the same
+
 
 

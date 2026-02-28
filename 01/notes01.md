@@ -1,12 +1,5 @@
 # Chapter 1 - A Tour of Compuer Systems
 
-hello.c 
-
-```#include <stdio.h>
-int main(void) {
-  printf("hello, world\n");
-}```
-
 ## 1.1 - Information is Bits + Context
 - All information in a system is represented using bits, the context in which we view data distinguishes it. 
 - Each letter in the hello.c program has an ascii code which is associated with a byte
