@@ -81,5 +81,17 @@ return either 0 (false) or 1 (true)
 - it can use up 2w bits, so in C its trunctaed to w bits
 - bit level representation of unsigned and two's complement multiplication are the same
 
+### 2.3.6 - Multiplying by Constants
+- when multiplying by a power of two, you can add k zero's to the end where 2^k represents the number so a left shift by k 
 
+### 2.3.7 - Dividing by Powers of 2
+- with an unsigned number x/2^k, we can do x >> k (logical right shift)
+- with a two's complement number if it is positive it works regularly and rounds down
+- if its negative it rounds down in a right bit shift rather than in division where it rounds towards 0
+- (x + (1 << k) - 1) >> k to bias it and make this act like division on negative numbers
+
+## 2.4 Floating Point
+
+### 2.4.1 - Fractional Binary Numbers
+- can be represented with points above decimal being powers of 2^k and below the decimals being powers of 2^-k
 

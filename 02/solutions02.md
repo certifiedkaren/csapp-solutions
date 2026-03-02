@@ -188,3 +188,37 @@ because if there is an overflow error it will cause undefined behavior before th
 9 -> 9 <br>
 B -> 7 <br>
 C -> 4 <br>
+
+
+## 2.35
+A. it would not fix the problem because the call to malloc would still wrap around when overflowing <br>
+B. <br>
+```
+size_t count = (size_t) ele_cnt;
+if (ele_cnt > 0 && count > SIZE_MAX / ele_size)
+    return NULL;
+void *result = malloc(ele_cnt * ele_size);
+if (result = NULL)
+    return NULL;
+```
+
+## 2.38
+1, 2, 3, 4, 5, 8, 9 <br>
+
+## 2.40
+7 -> (x << 3) - x <br>
+30 -> (x << 4) + (x << 3) + (x << 2) + (x << 1) <br>
+28 -> (x << 5) - (x << 2) <br>
+55 -> (x << 6) - (x << 3) - x <br>
+
+## 2.45
+1/8 -> 0.001 -> 0.125 <br>
+3/4 -> 0.11 -> 0.75 <br>
+5/16 -> 0.0101 -> 0.3125 <br>
+2 11/16 -> 10.1011 -> 10.6875 <br>
+
+## 2.46
+A. 0.1 - x = 0.0000000000000000000000011001100...
+B. 9.54 * 10^-8
+C. 9.54 * 10^-8 * 3600000 = 0.343 sec error
+D. 0.343 * 2000 = 686.6m
