@@ -93,5 +93,19 @@ return either 0 (false) or 1 (true)
 ## 2.4 Floating Point
 
 ### 2.4.1 - Fractional Binary Numbers
-- can be represented with points above decimal being powers of 2^k and below the decimals being powers of 2^-k
+- **fixed point representation** -> can be represented with points above decimal being powers of 2^k and below the decimals being powers of 2^-k
 
+### 2.4.2 - IEEE Floating Point Representation
+- Single precision -> 32 bits. 1 sign bit, 8 exponent bits, 23 fractional bits
+- Double precision -> 64 bits. 1 sign bit, 11 exponent bits, 52 fractional bits
+- The **exponent** is 2^k, where k is the exponent, so its like binary scientific notation
+- We need to add a **bias** to the exponent in the form 2^(k-1) - 1. where k is the number of bits 
+- **Normalized Values** -> bit pattern of exp is not all 0's or 1's, if the value is normalized, we can know that the first digit is 1.xxxx, so we can omit the bit and get an extra bit of precision
+- **Denormalized values** -> when the exp is all 0's and we want to represent a number close to 0, we remove the implied 1 in the front. exponent is determine by 1 - bias in this case
+- **Special values** -> when exp bits are all 1's, it represents positive and negative infinity
+
+### 2.4.4 - Rounding
+- The default rounding method is **round to even**, which attempts to find the closest match. If its in the middle like 1.5, it will round to the closest even number so 2.
+
+### 2.5.4 - Floating Point Operations
+- because of the rounding in floating point numbers, operations are not associative and distributing doesn't work all the time.
