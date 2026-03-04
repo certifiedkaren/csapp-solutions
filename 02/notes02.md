@@ -107,5 +107,5 @@ return either 0 (false) or 1 (true)
 ### 2.4.4 - Rounding
 - The default rounding method is **round to even**, which attempts to find the closest match. If its in the middle like 1.5, it will round to the closest even number so 2.
 
-### 2.5.4 - Floating Point Operations
+### 2.4.5 - Floating Point Operations
 - because of the rounding in floating point numbers, operations are not associative and distributing doesn't work all the time.

@@ -253,3 +253,30 @@ A. x = 0.00011001100110011001101 <br>
 B. x - 0.1 = 2.38 * 10^-8 <br>
 C. 10^-8 * 60 * 60 * 60 * 10 = 0.086 <br>
 D. 0.086 * 2000 = 171 m <br>
+
+## 2.54
+A. True <br>
+B. Large integers can't always be represented by floats<br>
+C. Not always true because can overflow from double to float <br>
+D. True <br>
+E. True <br>
+F. True <br>
+G. True <br>
+H. Not always true since a large float and a small double, the double would be lost<br>
+
+
+# 2.61
+```
+A. Any bit of x equals 1
+x != 0;
+
+B. Any bit of x equals 0
+~x != 0;
+
+C. Any bit in the least significant byte of x equals 1 
+(x & 0xFF) != 0;
+
+D. Any bit in the most significant byte of x equals 0 
+(x >> 24) != 0xFF; 
+```
+```
