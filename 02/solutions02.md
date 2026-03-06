@@ -265,7 +265,7 @@ G. True <br>
 H. Not always true since a large float and a small double, the double would be lost<br>
 
 
-# 2.61
+## 2.61
 ```
 A. Any bit of x equals 1
 x != 0;
@@ -279,4 +279,22 @@ C. Any bit in the least significant byte of x equals 1
 D. Any bit in the most significant byte of x equals 0 
 (x >> 24) != 0xFF; 
 ```
+
+## 2.71
+
 ```
+// extract byte from word. return as signed integer
+// failed attempt
+int xbyte(packed_t word, int bytenum) {
+  return (word >> (bytenum << 3)) & 0xFF;
+}
+
+// correct code
+int xbyte(packed_t word, int bytenum) {
+  shift = (3 - bytenum) << 3;
+  return ((int)(word << shift)) >> shift;
+}
+```
+
+A. its wrong because its doing a 0xFF mask at the end which makes it unsigned <br>
+
