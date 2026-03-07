@@ -295,6 +295,29 @@ int xbyte(packed_t word, int bytenum) {
   return ((int)(word << shift)) >> shift;
 }
 ```
-
 A. its wrong because its doing a 0xFF mask at the end which makes it unsigned <br>
+
+## 2.72
+```
+// copy integer into buffer if space is available
+// buggy code
+void copy_int(int val, void *buf, int maxbytes) {
+  if (maxbytes-sizeof(val) >= 0)
+    memcpy(buf, (void *) &val, sizeof(val));
+}
+
+// working code
+void copy_int(int val, void *buf, int maxbytes) {
+  if (maxbytes >= sizeof(val))
+    memcpy(buf, (void *) &val, sizeof(val));
+```
+
+A. because it turns into unsigned subtraction so it wraps around <br> 
+
+## 2.77
+
+A. (x << 4) + x; <br>
+B. x - (x << 3); <br>
+C. (x << 6) - (x << 2); <br>
+D. (x << 4) - (x << 7); <br>
 
