@@ -375,4 +375,8 @@ float fpwer2 (int x) {
 }
 ```
 
+## 2.91
+A. 11.0010010000111111011011 <br>
+B. 11.001001001 ... <br>
+C. 9th bit position they diverge <br>
 
