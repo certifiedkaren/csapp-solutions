@@ -321,3 +321,58 @@ B. x - (x << 3); <br>
 C. (x << 6) - (x << 2); <br>
 D. (x << 4) - (x << 7); <br>
 
+## 2.82
+A. not always 1 because it can overflow <br>
+B. always 1, the expressions are equal when you expand <br>
+C. always 1 <br>
+D. always 1 <br>
+E. always 1 because unsigned uses logical shifts <br>
+
+
+## 2.84
+```
+// tests if x <= y
+int float_le(float x, float y) {
+  unsigned ux = f2u(x);
+  unsigned uy = f2u(y);
+
+  unsigned sx = ux >> 31;
+  unsigned sy = uy >> 31;
+
+  return (sx > sy) || 
+         (sx && sy && ux >= uy) ||
+         (!sx && !sy && ux <= uy) ||
+         (!(ux | uy) << 0);
+}
+```
+
+
+## 2.86
+smallest positive denormalized -> value: 2^-16445 <br>
+smallest positive normalized -> value: 2^-16382 <br>
+largest normalized -> (2 - 2^-63) * 2^16383 <br>
+
+## 2.90
+
+```
+float fpwer2 (int x) {
+  unsigned exp, frac;
+  unsigned u;
+
+  if (x < -149) {
+    exp = 0;
+    frac = 0;
+  } else if (x < -126) {
+    exp = 0;
+    frac = 1 << (x + 149);
+  } else if (x < 128) {
+    exp = 127; 
+    frac = 0;
+  } else {
+    exp = 255;
+    frac = 0;
+  }
+}
+```
+
+
