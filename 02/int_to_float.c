@@ -23,55 +23,49 @@ typedef unsigned float_bits;
 
 // returns the bit-level representation of (float) i
 float_bits float_i2f(int i) {
-  unsigned sign = i & 0x80000000;
-  unsigned frac = i;
+  unsigned sign = 0;
+  unsigned x = (unsigned) i;
   if (i == 0)
     return 0;
+  if (i < 0) {
+    sign = i & 0x80000000;
+    x = ~x + 1;
+  }
+  unsigned frac = x;
 
-  int msb = 31 - __builtin_clz((unsigned) i);
-
+  int msb = 31 - __builtin_clz(x);
+  unsigned exp = (msb + 127) << 23;
   if (msb > 23) {
     int shift = msb - 23;
+    unsigned truncated = frac >> shift;
     unsigned discarded = frac & ((1 << (shift)) - 1);
     unsigned half = 1 << (shift - 1);
-    if (discarded > half) {
-      frac++; 
-    } else if (discarded == half) {
-      // guard bit: LSB
-      // round bit: 1st bit removed
-      // sticky bit: OR of remaining bits
-      unsigned lsb = (frac >> (shift - 1)) & 1;
-      unsigned round_bit = (frac >> (shift - 1)) & 1;
-      unsigned sticky_bit = (i & ((1 << (shift - 2)) - 1)) != 0;
-      if (round_bit == 1 && (sticky_bit == 1 || lsb == 1))
-        frac++;
+    if (discarded > half || (discarded == half && (truncated & 1)))
+      truncated++; 
+
+    if (truncated & 0x01000000) {
+      exp += 1 << 23;
+      truncated >>= 1; 
     }
-    frac >>= (msb - 23);
-    frac &= 0x007FFFFF;
-  } else if (msb < 23){
+    frac = truncated & 0x007FFFFF;
+  } else { 
     frac <<= (23 - msb);
     frac &= 0x007FFFFF;
-  } else {
-    frac &= 0x007FFFFF;
-  }
-
-  unsigned exp = msb + 127;
-  exp <<= 23;
+  } 
 
   return sign | exp | frac;
 }
 
 int main(void) {
-  // int to float
   for (int64_t i = 0; i <= 0xFFFFFFFF; i++) {
-    float_bits f = (float_bits)i;
-    float expected = (float) f;
+    int x = (int) i;
+    float expected = (float) x;
     float_bits expected_bits = f2u(expected);
-    int result = float_i2f(f);
+    int result = float_i2f(x);
 
     if (result != expected_bits) {
       printf("Mismatch\n");
-      printf("input: 0x%08x\n", f);
+      printf("input: 0x%08x\n", x);
       printf("expected: 0x%08x\n", expected_bits);
       printf("result: 0x%08x\n", result);
       return 1;
