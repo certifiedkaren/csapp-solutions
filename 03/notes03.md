@@ -58,4 +58,13 @@ lines beginning with **'.'** are directives to guide assembler and linker <br>
 - **register** - contents of a register
 - **memory** - access a memory address according to a computed address
 
+### 3.4.2 - Data Movement Instructions
+- **mov** instructions are used to copy data from a source location to destination
+- movb -> move byte (1 byte)
+- movw -> move word (2 byte)
+- movl -> move double word (4 byte)
+- movq -> move quad word (8 byte)
+`movl %bp, %sp    # copy data in bp to sp`
+- **movzb** -> copies smaller unsigned value into larger register, fills extra upper bits with 0
+- **movsb** -> copies smaller signed value into larger register, fills extra upper bits with sign bit
 
