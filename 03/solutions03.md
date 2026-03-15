@@ -62,3 +62,77 @@ sp = char -> dp = short
 movsbw (%rdi), %ax
 movb %ax, (%rsi)
 ```
+
+## 3.5
+```
+void decode1(long *xp, long *yp, long *zp)
+xp in %rdi, yp in %rsi, zp in %rdx
+decode1:
+  movq (%rdi), %r8
+  movq (%rsi), %rcx
+  movq (%rdx), %rax
+  movq %r8, (%rsi)
+  movq %rcx, (%rdx)
+  movq %rax, (%rdi)
+ret
+
+void decode1(long *xp, long *yp, long *zp) {
+  long x = *xp;
+  long y = *yp;
+  long z = *zp;
+  *yp = x;
+  *zp = y;
+  *xp = z;
+}
+```
+
+## 3.6
+```
+%rbx = p, %rdx = q
+leaq 9(%rdx), %rax -> rax = 9 + q
+leaq (%rdx,%rbx), %rax -> rax = q + p
+leaq (%rdx,%rbx,3), %rax -> rax = q + 3p
+leaq 2(%rbx,%rbx,7), %rax -> rax = 8p + 2
+leaq 0xE(,%rdx,3), %rax -> rax = 3q + 14
+leaq 6(%rbx,%rdx,7), %rax -> rax = p + 7q + 6
+```
+
+## 3.7
+```
+short scale3 (short x, short y, short z) {
+  short t = 10 * y + z + y * x;
+  return t;
+}
+```
+
+## 3.8
+```
+addq %rcx,(%rax)
+dest -> 0x100 value -> 0x100
+subq %rdx,8(%rax)
+dest -> 0x108 value -> 0xA8
+imulq $16,(%rax,%rdx,8)
+dest -> 0x118 value -> 0x110
+incq 16(%rax)
+dest -> 0x110 -> value -> 0x14
+decq %rcx
+dest -> %rcx value -> 0x0
+subq %rdx,%rax
+dest -> %rax value -> 0xFD
+```
+
+## 3.9
+```
+long shift_left4_rightn(long x, long n) {
+  x <<= 4;
+  x >>= n;
+  return x;
+}
+x in %rdi, n in %rsi
+shift_left4_rightn:
+  movq %rdi, %rax
+  salq $4, %rax
+  movl %esi, %ecx
+  sarq %cl, %rax
+  ret
+```

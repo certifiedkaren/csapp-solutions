@@ -68,3 +68,42 @@ lines beginning with **'.'** are directives to guide assembler and linker <br>
 - **movzb** -> copies smaller unsigned value into larger register, fills extra upper bits with 0
 - **movsb** -> copies smaller signed value into larger register, fills extra upper bits with sign bit
 
+### 3.4.4 - Pushing and Popping Stack Data
+- Stacks are last in first out
+- as we go towards the bottom of the stack, the addresses increase
+- top of stack is pointed to by %rsp
+- pushq -> push item onto stack, first decrement stack by 8, then movq to top of stack
+- popq -> pop item from stack, first read top of stack, then increment stack pointer by 8
+
+## 3.5 - Arithmetic and Logical Operators
+| Instruction | Effect | Description |
+|---|---|---|
+| `leaq S, D` | `D ← &S` | Load effective address |
+| `INC D` | `D ← D + 1` | Increment |
+| `DEC D` | `D ← D − 1` | Decrement |
+| `NEG D` | `D ← −D` | Negate |
+| `NOT D` | `D ← ~D` | Complement |
+| `ADD S, D` | `D ← D + S` | Add |
+| `SUB S, D` | `D ← D − S` | Subtract |
+| `IMUL S, D` | `D ← D * S` | Multiply |
+| `XOR S, D` | `D ← D ^ S` | Exclusive-or |
+| `OR S, D` | `D ← D \| S` | Or |
+| `AND S, D` | `D ← D & S` | And |
+| `SAL k, D` | `D ← D << k` | Left shift |
+| `SHL k, D` | `D ← D << k` | Left shift (same as SAL) |
+| `SAR k, D` | `D ← D >>ₐ k` | Arithmetic right shift |
+| `SHR k, D` | `D ← D >>ₗ k` | Logical right shift |
+
+### 3.5.1 - Load Effective Address
+- leaq calculates the address of a memory location and stores that address into a register
+- similar to the & in c
+- it can also be used for arithmetic, ex. leaq 7(%rdx, %rdx,4) -> 5x + 7
+- leaq 5(%rdi, %rsi, 4), %rax -> rdi + (rsi * 4) + 5, store that value into rax
+
+### 3.5.2 - Unary and Binary Operations
+- Unary operations are where the operation serves as both the source and destination
+- Binary operations -> second operand is used as source and destination (x -= y) 
+- in the syntax of `subq %rax,%rdx`, decrements %rdx by %rax
+
+### 3.5.3 - Shift Operations
+- require the shift amount as an immediate value or in %cl
