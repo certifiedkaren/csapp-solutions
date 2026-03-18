@@ -136,3 +136,142 @@ shift_left4_rightn:
   sarq %cl, %rax
   ret
 ```
+
+## 3.10
+```c
+short arith3(short x, short y, short z) {
+  short p1 = z | y;
+  short p2 = p1 >> 9;
+  short p3 = ~p2;
+  short p4 = y - p3; 
+}
+```
+
+## 3.12
+```
+uremdiv:
+  movq %rdx, %r8
+  movq %rdi, %rax
+  movl $0, %edx
+  idivq %rsi
+  movq %rax, (%r8)
+  movq %rdx, (%rcx)
+  ret
+```
+
+## 3.13
+A. int, comparison: < (signed) <br>
+B. short, comparison: >= (signed) <br>
+C. unsigned char, comparison: > (signed) <br>
+D. long, unsigned long, comparison: ~ <br>
+
+## 3.14
+A. long, comparison: >= (signed) <br>
+B. short, unsigned short, comparison: = <br>
+C. unsigned char, comparison: > (unsigned) <br>
+D. int, comparison: <= (signed) <br>
+
+## 3.15
+A. 4003fe <br>
+B. 400425 <br>
+C. ja -> 400543, pop -> 400545 <br>
+D. 400560 <br>
+
+## 3.16
+```c
+// A.
+void goto_cond(short a, short *p) {
+    if (a == 0) {
+      goto done;
+    if (a >= *p)
+      goto done;
+    *p = a;
+  done:
+    return;
+  }
+}
+```
+B. Because it needs to perform 2 comparisons in that one if statement <br>
+
+## 3.17
+```c
+// A.
+long lt_cnt = 0;
+long ge_cnt = 0;
+long absdiff_se(long x, long y) {
+  long result;
+  if (x < y)
+    goto true;
+  ge_cnt++; 
+  result = x - y;
+  return result;
+  true:
+    lt_cnt++;
+    result = y - x;
+    return result;
+}
+```
+
+## 3.18
+```c
+short test (short x, short y, short z) {
+  short val = z + y - x;
+  if (z > 5) {
+    if (y > 2)
+      val = x / z;
+    else
+      val = x / y;
+  } else if (z < 3)
+      val = z / y;
+  return val;
+}
+```
+
+## 3.19
+A. 40 cycles <br>
+B. 65 cycles <br>
+
+## 3.20
+A. / <br>
+
+```asm
+# B
+arith:
+  leaq 15(%rdi), %rbx   # temp = x + 15
+  testq %rdi, %rdi      # test x
+  cmovns %rdi, %rbx     # if x >= 0, rbx = x
+  sarq $4, %rbx         # arithmetic right shift by 4
+  ret
+```
+
+## 3.21
+```c
+short test(short x, short y) {
+  short val = y + 12;
+    if (x < 0) {
+      if (x < y)
+        val = x * y;
+      else
+        val = x | y;
+  } else if (y >= 10)
+    val = x / y;
+  return val;
+}
+```
+
+## 3.23
+A. %rbx, %rcx, %rdx <br>
+B. using the lea instruction, it gets the value in that address <br>
+
+## 3.24
+```c
+short loop_while(short a, short b) {
+  short result = 0;
+  while (a > b) {
+    result = result + a * b;
+    a = a - 1;
+  }
+  return result
+}
+
+```

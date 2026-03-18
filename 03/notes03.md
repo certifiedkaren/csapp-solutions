@@ -106,4 +106,121 @@ lines beginning with **'.'** are directives to guide assembler and linker <br>
 - in the syntax of `subq %rax,%rdx`, decrements %rdx by %rax
 
 ### 3.5.3 - Shift Operations
-- require the shift amount as an immediate value or in %cl
+- requires the shift amount as an immediate value or in %cl
+
+### 3.5.5 - Special Arithmetic Operations 
+- an **oct word** is a 16 byte number, can be used when multiplying two 64 bit numbers
+- the lower 8 bytes are stored in %rax, higher 8 bytes stored in %rdx
+
+## 3.6 - Control
+
+### 3.6.1 - Control Codes
+- CPU maintains set of single-bit *condition code* registers to describe attributes of the most recent arithmetic or logical operation
+- CF: Carry flag -> most recent operation resulted in carry
+- ZF: Zero flag -> most recent operation yielded 0
+- SF: Sign flag -> most recent operation resulted in negative
+- OF -> Overflow flag -> most recent operation caused two's-complement overflow
+- the **cmp a,b** instruction compares b - a, only updating conditional codes
+- the **test** instruction compares a & b, only updating conditional codes
+
+### 3.6.2
+- Condition codes are mainly used in 3 common ways
+1. set a single byte to 0 or 1 depend on condition codes <br>
+2. conditionally jump to other part of program <br>
+3. conditionally transfer data <br>
+
+- set instruction is used to set a byte based on cpu flags
+| Instruction | Synonym | Effect | Set Condition |
+|---|---|---|---|
+| `sete D` | `setz` | `D ← ZF` | Equal / zero |
+| `setne D` | `setnz` | `D ← ~ZF` | Not equal / not zero |
+| `sets D` |  | `D ← SF` | Negative |
+| `setns D` |  | `D ← ~SF` | Nonnegative |
+| `setg D` | `setnle` | `D ← ~(SF ^ OF) & ~ZF` | Greater (signed >) |
+| `setge D` | `setnl` | `D ← ~(SF ^ OF)` | Greater or equal (signed ≥) |
+| `setl D` | `setnge` | `D ← SF ^ OF` | Less (signed <) |
+| `setle D` | `setng` | `D ← (SF ^ OF) | ZF` | Less or equal (signed ≤) |
+| `seta D` | `setnbe` | `D ← ~CF & ~ZF` | Above (unsigned >) |
+| `setae D` | `setnb` | `D ← ~CF` | Above or equal (unsigned ≥) |
+| `setb D` | `setnae` | `D ← CF` | Below (unsigned <) |
+| `setbe D` | `setna` | `D ← CF | ZF` | Below or equal (unsigned ≤) |
+
+### 3.6.3 - Jump Instructions
+- A jump instruction can cause the program to switch to a new position in the program
+- ex. `jmp .L1`
+- ex. `jmp *%rax #jump to value in register rax`
+
+| Instruction        | Synonym | Jump Condition            | Description                      |
+|--------------------|--------|---------------------------|----------------------------------|
+| jmp *Label*        | —      | 1                         | Direct jump                      |
+| jmp **Operand*      | —      | 1                         | Indirect jump                    |
+| je *Label*         | jz     | ZF                        | Equal / zero                     |
+| jne *Label*        | jnz    | ~ZF                       | Not equal / not zero             |
+| js *Label*         | —      | SF                        | Negative                         |
+| jns *Label*        | —      | ~SF                       | Nonnegative                      |
+| jg *Label*         | jnle   | ~(SF ^ OF) & ~ZF          | Greater (signed >)               |
+| jge *Label*        | jnl    | ~(SF ^ OF)                | Greater or equal (signed >=)     |
+| jl *Label*         | jnge   | SF ^ OF                   | Less (signed <)                  |
+| jle *Label*        | jng    | (SF ^ OF) \| ZF           | Less or equal (signed <=)        |
+| ja *Label*         | jnbe   | ~CF & ~ZF                 | Above (unsigned >)               |
+| jae *Label*        | jnb    | ~CF                       | Above or equal (unsigned >=)     |
+| jb *Label*         | jnae   | CF                        | Below (unsigned <)               |
+| jbe *Label*        | jna    | CF \| ZF                  | Below or equal (unsigned <=)     |
+
+### 3.6.4 - Jump Instruction Encodings
+- jump targets will be encoded by the assembler and linker
+- *PC relative* - encoding which takes the difference between the address of the target and instruction following the jump, allows to use less memory sometimes than absolute address
+- ex. `jmp +0x20 #go 32 bytes forward from current instruction`
+
+### 3.6.5 - Implementing Conditional Branches with Conditional Control
+- an if statement in assembly typically looks like this
+```
+  t = test-expr;
+  if (!t)
+    goto false;
+  then-statement
+  goto done;
+false:
+  else-statement
+done:
+```
+
+### 3.6.6 - Implementing Conditional Branches with Conditional Moves
+- we can calculate both of the conditions and then compare them in the end, which can sometimes be quicker than branching
+- cpus try to predict which branch to go to, so if it ends up being wrong it has to use a lot of clock cycles to redo its work
+- use the **cmov** instruction to compare and set the data (destination = source (if condition true))
+- don't use conditional moves if one branch could result in error or branches are computationally expensive
+
+### 3.6.7 - Loops
+- One way compilers generate a loop is using a **do-while** statement
+- The body statement is executed at least once
+```
+loop:
+  body statement
+  t = test-expr;
+  if (t)
+    goto loop;
+```
+
+- Another type of loop is the **while** loop
+```
+method 1 (jump to middle)
+  goto test;
+loop:
+  body statement;
+t = test-expr;
+if (t)
+  goto loop;
+
+method 2 (guarded do)
+  t = test-expr;
+  if (!t)
+    goto done;
+loop:
+  body-statement;
+  t = test-expr;
+  if (t)
+    goto loop;
+done:
+```
+
