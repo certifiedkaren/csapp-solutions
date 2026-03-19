@@ -224,3 +224,9 @@ loop:
 done:
 ```
 
+- for loops use the same code as a while loop
+
+### 3.6.8 - Switch Statements
+- **jump table** -> an array where *i* is the address of a code segment
+- a jump table allows for fast data access, which is why a switch statement is efficient
+

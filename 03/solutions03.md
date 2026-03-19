@@ -273,5 +273,94 @@ short loop_while(short a, short b) {
   }
   return result
 }
-
 ```
+
+## 3.25
+```c
+long loop_while2(long a, long b) {
+  long result = b;
+  while (b > 0) {
+    result = result * a;
+    b = b - a;
+  }
+  return result;
+}
+```
+
+## 3.26
+A. jump to middle <br>
+```c
+short test_one(unsigned short x) {
+  short val = 1;
+  while (x != 0) {
+    val ^= x;
+    x >>= 1;
+  }
+  return val & 0;
+}
+```
+
+## 3.27
+```c
+long fibonacci(long n) {
+    int count = 2;
+    int first = 0, second = 1, next;
+    if (count <= 1)
+      goto done;
+  loop:
+    next = first + second;
+    first = second; 
+    second = next; 
+    count++;
+    if (count <= n)
+      goto loop;
+  done:
+    return n;
+}
+```
+
+## 3.28
+```c
+// A.
+short test_two(unsigned short x) {
+  short val = 0;
+  short i;
+  for (int i = 64; i != 0; i--) {
+    val = (val << 1) | (x & 0x1);
+    x >>= 1;
+  }
+  return val;
+}
+```
+
+B. Because it is using a guarded do and the i != 0 test is put inside of the for loop. <br>
+C. The function reverses x by shift the bits of x from left to right, then filling those bits in as it shifts from right to left. <br>
+
+## 3.30
+A. -2 to 6 <br>
+B. case .L5 and .L7 <br> 
+
+## 3.31
+```c
+void switcher(long a, long b, long c, long *dest) {
+  long val;
+  switch(a) {
+    case 5: 
+      c = b ^ 15;
+    case 0:
+      val = c + 112;
+      break;
+    case 2:
+    case 7:
+      val = (c + b) << 2;
+      break;
+    case 4:
+      val = a;
+      break;
+  default:
+    val = b;
+  }
+  *dest = val;
+}
+```
+
